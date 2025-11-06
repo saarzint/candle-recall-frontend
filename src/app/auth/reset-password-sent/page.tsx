@@ -2,11 +2,11 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Icon from '@/assets/icons/icon.svg';
 
-export default function ResetPasswordSentPage() {
+function ResetPasswordSentContent() {
   const searchParams = useSearchParams();
   const email = searchParams.get('email') || 'example@gmail.com';
   const [countdown, setCountdown] = useState(60);
@@ -98,5 +98,19 @@ export default function ResetPasswordSentPage() {
         Not affiliated with TD Ameritrade, Charles Schwab, or OpenAI. Not investment advice. For entertainment purposes only.
       </footer>
     </div>
+  );
+}
+
+export default function ResetPasswordSentPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-body-background flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-gray-600">Loading...</p>
+        </div>
+      </div>
+    }>
+      <ResetPasswordSentContent />
+    </Suspense>
   );
 }
