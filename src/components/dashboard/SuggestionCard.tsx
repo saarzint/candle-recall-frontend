@@ -8,10 +8,10 @@ export default function SuggestionCard({ icon, text, onClick }: SuggestionCardPr
   return (
     <button
       onClick={onClick}
-      className="flex items-start gap-3 p-2 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors text-left w-full"
+      className="flex items-start gap-3 p-4 border border-border rounded-lg hover:bg-sidebar-foreground transition-colors text-left w-full bg-background"
     >
-      <div className="flex-shrink-0 text-gray-600 mt-0.5">{icon}</div>
-      <p className="text-sm text-gray-700">{text}</p>
+      <div className="flex-shrink-0 text-muted-foreground mt-0.5">{icon}</div>
+      <p className="text-sm text-foreground">{text}</p>
     </button>
   );
 }

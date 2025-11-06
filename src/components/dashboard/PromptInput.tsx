@@ -32,7 +32,7 @@ export default function PromptInput({
 
   return (
     <div className="w-full">
-      <div className="relative flex items-center gap-3 bg-white border border-gray-300 rounded-xl px-4 py-3.5 shadow-md hover:shadow-lg focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/20 transition-all">
+      <div className="relative flex items-center gap-3 bg-background border border-border rounded-xl px-4 py-3.5 shadow-md hover:shadow-lg focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/20 transition-all">
         {/* Attachment Button */}
         <button className="flex-shrink-0 w-10 h-10 flex items-center justify-center bg-primary text-primary hover:bg-primary/20 rounded-lg transition-colors">
           <Image src={AttachmentIcon} alt="Attach file" width={20} height={20} />
@@ -45,7 +45,7 @@ export default function PromptInput({
           onChange={(e) => setValue(e.target.value)}
           onKeyDown={handleKeyDown}
           placeholder={placeholder}
-          className="flex-1 bg-transparent border-none outline-none text-base text-gray-900 placeholder:text-gray-500"
+          className="flex-1 bg-transparent border-none outline-none text-base text-foreground placeholder:text-muted-foreground"
         />
 
         {/* Submit Button */}

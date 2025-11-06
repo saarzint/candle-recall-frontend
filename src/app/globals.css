@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 :root {
-  /* Base Theme Colors */
+  /* Light Theme Colors */
   --base-primary: #27A392;
   --base-foreground: #18181B;
   --base-background: #FFFFFF;
@@ -11,6 +11,27 @@
   --base-destructive: #DC2626;
   --base-destructive-foreground: #FEF2F2;
   --base-logo: #141E52;
+  --base-border: #E4E4E7;
+  --base-sidebar-foreground: #F4F4F5;
+
+  /* Legacy support */
+  --background: var(--base-background);
+  --foreground: var(--base-foreground);
+}
+
+:root.dark {
+  /* Dark Theme Colors */
+  --base-primary: #27A392;
+  --base-foreground: #FAFAFA;
+  --base-background: #18181B;
+  --base-muted-foreground: #A1A1AA;
+  --base-secondary: #27272A;
+  --base-body-background: #27272A;
+  --base-destructive: #DC2626;
+  --base-destructive-foreground: #FEF2F2;
+  --base-logo: #FFFFFF;
+  --base-border: #3F3F46;
+  --base-sidebar-foreground: #27272A;
 
   /* Legacy support */
   --background: var(--base-background);
@@ -28,6 +49,8 @@
   --color-destructive: var(--base-destructive);
   --color-destructive-foreground: var(--base-destructive-foreground);
   --color-logo: var(--base-logo);
+  --color-border: var(--base-border);
+  --color-sidebar-foreground: var(--base-sidebar-foreground);
 
   /* Fonts */
   --font-sans: var(--font-geist-sans);

@@ -34,9 +34,9 @@ export default function ChatContent({ userName = 'Nick' }: ChatContentProps) {
   return (
     <div className="w-full max-w-3xl mx-auto flex flex-col items-center">
       {/* Logo and Brand */}
-      <div className="bg-white rounded-2xl shadow-sm border border-gray-200 px-8 py-6 mb-8 flex items-center gap-4">
+      <div className="bg-background rounded-2xl shadow-sm border border-border px-8 py-6 mb-8 flex items-center gap-4">
         <Image src={Icon} alt="Candle Recall" width={48} height={48} />
-        <h1 className="text-3xl font-bold text-foreground">Candle Recall</h1>
+        <h1 className="text-3xl font-bold text-logo">Candle Recall</h1>
       </div>
 
       {/* Welcome Message */}
@@ -52,7 +52,7 @@ export default function ChatContent({ userName = 'Nick' }: ChatContentProps) {
       {/* Suggestions Section */}
       <div className="w-full">
         <div className="mb-4">
-          <p className="text-sm text-gray-600">For you</p>
+          <p className="text-sm text-muted-foreground">For you</p>
         </div>
 
         <div className="space-y-3 mb-4">

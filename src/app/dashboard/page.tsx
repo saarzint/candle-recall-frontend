@@ -1,11 +1,13 @@
 'use client';
 
 import { Sidebar, TopBar, ChatContent, PromptInput } from '@/components/dashboard';
+import { ThemeProvider } from '@/contexts/ThemeContext';
 
 export default function DashboardPage() {
 
   return (
-    <div className="flex h-screen bg-secondary">
+    <ThemeProvider>
+      <div className="flex h-screen bg-body-background">
       {/* Sidebar */}
       <Sidebar />
 
@@ -30,5 +32,6 @@ export default function DashboardPage() {
         </div>
       </div>
     </div>
+    </ThemeProvider>
   );
 }
