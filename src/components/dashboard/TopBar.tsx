@@ -1,6 +1,8 @@
 'use client';
 
+import { useState, useRef, useEffect } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import SettingsIcon from '@/assets/icons/settings.svg';
 import DayIcon from '@/assets/icons/day.svg';
 import NightIcon from '@/assets/icons/night.svg';
@@ -14,6 +16,31 @@ interface TopBarProps {
 export default function TopBar({ title = 'New Chat' }: TopBarProps) {
   const { theme, setTheme } = useTheme();
   const isDarkMode = theme === 'dark';
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
+
+  // Close menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        setIsMenuOpen(false);
+      }
+    };
+
+    if (isMenuOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isMenuOpen]);
+
+  const handleLogout = () => {
+    // TODO: Implement logout logic
+    console.log('Logging out...');
+    setIsMenuOpen(false);
+  };
 
   return (
     <header className="h-16 bg-secondary flex items-center justify-between px-6">
@@ -84,14 +111,86 @@ export default function TopBar({ title = 'New Chat' }: TopBarProps) {
           />
         </button>
 
-        {/* User Profile */}
-        <button className="w-10 h-10 rounded-full overflow-hidden border-2 border-gray-200 hover:border-gray-300 transition-colors">
-          <img
-            src="https://api.dicebear.com/7.x/avataaars/svg?seed=Nick"
-            alt="User Profile"
-            className="w-full h-full object-cover"
-          />
-        </button>
+        {/* User Profile with Dropdown */}
+        <div className="relative" ref={menuRef}>
+          <button
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            className="w-10 h-10 rounded-full overflow-hidden border-2 border-gray-200 hover:border-gray-300 transition-colors"
+          >
+            <img
+              src="https://api.dicebear.com/7.x/avataaars/svg?seed=Nick"
+              alt="User Profile"
+              className="w-full h-full object-cover"
+            />
+          </button>
+
+          {/* Dropdown Menu */}
+          {isMenuOpen && (
+            <div className={`absolute right-0 mt-2 w-56 rounded-lg shadow-lg border overflow-hidden z-50 ${
+              isDarkMode
+                ? 'bg-[#18181B] border-gray-700'
+                : 'bg-white border-gray-200'
+            }`}>
+              {/* Email */}
+              <div className={`px-4 py-3 border-b ${
+                isDarkMode ? 'border-gray-700' : 'border-gray-200'
+              }`}>
+                <p className="text-sm text-muted-foreground">address@example.com</p>
+              </div>
+
+              {/* Menu Items */}
+              <div className="py-1">
+                <Link
+                  href="/account"
+                  onClick={() => setIsMenuOpen(false)}
+                  className={`block px-4 py-2.5 text-sm transition-colors ${
+                    isDarkMode
+                      ? 'text-gray-200 hover:bg-gray-800'
+                      : 'text-gray-700 hover:bg-gray-100'
+                  }`}
+                >
+                  Account
+                </Link>
+                <Link
+                  href="/billing"
+                  onClick={() => setIsMenuOpen(false)}
+                  className={`block px-4 py-2.5 text-sm transition-colors ${
+                    isDarkMode
+                      ? 'text-gray-200 hover:bg-gray-800'
+                      : 'text-gray-700 hover:bg-gray-100'
+                  }`}
+                >
+                  Billing
+                </Link>
+                <Link
+                  href="/support"
+                  onClick={() => setIsMenuOpen(false)}
+                  className={`block px-4 py-2.5 text-sm transition-colors ${
+                    isDarkMode
+                      ? 'text-gray-200 hover:bg-gray-800'
+                      : 'text-gray-700 hover:bg-gray-100'
+                  }`}
+                >
+                  Support
+                </Link>
+              </div>
+
+              {/* Logout */}
+              <div className={`border-t ${isDarkMode ? 'border-gray-700' : 'border-gray-200'}`}>
+                <button
+                  onClick={handleLogout}
+                  className={`w-full text-left px-4 py-2.5 text-sm font-medium transition-colors ${
+                    isDarkMode
+                      ? 'text-red-400 hover:bg-gray-800'
+                      : 'text-red-600 hover:bg-gray-100'
+                  }`}
+                >
+                  Log out
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
       </div>
     </header>
   );

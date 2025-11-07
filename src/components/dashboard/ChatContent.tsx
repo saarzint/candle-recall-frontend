@@ -1,6 +1,7 @@
 'use client';
 
 import Image from 'next/image';
+import { useTheme } from '@/contexts/ThemeContext';
 import Icon from '@/assets/icons/icon.svg';
 import SparkleIcon from '@/assets/icons/sparkle.svg';
 import SuggestionCard from './SuggestionCard';
@@ -11,6 +12,9 @@ interface ChatContentProps {
 }
 
 export default function ChatContent({ userName = 'Nick' }: ChatContentProps) {
+  const { theme } = useTheme();
+  const isDarkMode = theme === 'dark';
+
   const suggestions = [
     {
       id: 1,
@@ -59,7 +63,7 @@ export default function ChatContent({ userName = 'Nick' }: ChatContentProps) {
           {suggestions.map((suggestion) => (
             <SuggestionCard
               key={suggestion.id}
-              icon={<Image src={SparkleIcon} alt="Sparkle" width={18} height={18} />}
+              icon={<Image src={SparkleIcon} alt="Sparkle" width={18} height={18} className={isDarkMode ? "brightness-0 invert" : ""} />}
               text={suggestion.text}
               onClick={() => console.log('Suggestion clicked:', suggestion.id)}
             />
