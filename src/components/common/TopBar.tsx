@@ -8,6 +8,7 @@ import DayIcon from '@/assets/icons/day.svg';
 import NightIcon from '@/assets/icons/night.svg';
 import EllipsisIcon from '@/assets/icons/ellipsis-horizontal.svg';
 import { useTheme } from '@/contexts/ThemeContext';
+import { AccountModal } from '@/components/modals';
 
 interface TopBarProps {
   title?: string;
@@ -17,6 +18,7 @@ export default function TopBar({ title = 'New Chat' }: TopBarProps) {
   const { theme, setTheme } = useTheme();
   const isDarkMode = theme === 'dark';
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isAccountModalOpen, setIsAccountModalOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
   // Close menu when clicking outside
@@ -140,17 +142,19 @@ export default function TopBar({ title = 'New Chat' }: TopBarProps) {
 
               {/* Menu Items */}
               <div className="py-1">
-                <Link
-                  href="/account"
-                  onClick={() => setIsMenuOpen(false)}
-                  className={`block px-4 py-2.5 text-sm transition-colors ${
+                <button
+                  onClick={() => {
+                    setIsMenuOpen(false);
+                    setIsAccountModalOpen(true);
+                  }}
+                  className={`w-full text-left px-4 py-2.5 text-sm transition-colors ${
                     isDarkMode
                       ? 'text-gray-200 hover:bg-gray-800'
                       : 'text-gray-700 hover:bg-gray-100'
                   }`}
                 >
                   Account
-                </Link>
+                </button>
                 <Link
                   href="/billing"
                   onClick={() => setIsMenuOpen(false)}
@@ -192,6 +196,12 @@ export default function TopBar({ title = 'New Chat' }: TopBarProps) {
           )}
         </div>
       </div>
+
+      {/* Account Modal */}
+      <AccountModal
+        isOpen={isAccountModalOpen}
+        onClose={() => setIsAccountModalOpen(false)}
+      />
     </header>
   );
 }

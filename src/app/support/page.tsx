@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Sidebar, TopBar } from '@/components/dashboard';
+import { Sidebar, TopBar } from '@/components/common';
 import Image from 'next/image';
 import SendIcon from '@/assets/icons/send.svg';
 import AttachmentIcon from '@/assets/icons/attachment.svg';

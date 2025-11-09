@@ -1,6 +1,7 @@
 'use client';
 
-import { Sidebar, TopBar, ChatContent, PromptInput } from '@/components/dashboard';
+import { Sidebar, TopBar } from '@/components/common';
+import { ChatContent } from '@/components/dashboard';
 import { ThemeProvider } from '@/contexts/ThemeContext';
 
 export default function DashboardPage() {
