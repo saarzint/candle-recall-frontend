@@ -12,9 +12,11 @@ import { AccountModal } from '@/components/modals';
 
 interface TopBarProps {
   title?: string;
+  actionButton?: React.ReactNode;
+  breadcrumb?: React.ReactNode;
 }
 
-export default function TopBar({ title = 'New Chat' }: TopBarProps) {
+export default function TopBar({ title = 'New Chat', actionButton, breadcrumb }: TopBarProps) {
   const { theme, setTheme } = useTheme();
   const isDarkMode = theme === 'dark';
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -46,11 +48,16 @@ export default function TopBar({ title = 'New Chat' }: TopBarProps) {
 
   return (
     <header className="h-16 bg-secondary flex items-center justify-between px-6">
-      {/* Title */}
-      <h1 className="text-lg font-semibold text-foreground">{title}</h1>
+      {/* Title or Breadcrumb */}
+      {breadcrumb || <h1 className="text-lg font-semibold text-foreground">{title}</h1>}
 
-      {/* Right Side Controls */}
-      <div className="flex items-center gap-3">
+      {/* Action Button and Right Side Controls */}
+      <div className="flex items-center gap-4">
+        {/* Optional Action Button */}
+        {actionButton && <div>{actionButton}</div>}
+
+        {/* Right Side Controls */}
+        <div className="flex items-center gap-3">
         {/* More Options */}
         <button className="p-2 text-gray-500 hover:text-gray-800 dark:text-gray-300 dark:hover:text-white transition-colors">
           <Image
@@ -194,6 +201,7 @@ export default function TopBar({ title = 'New Chat' }: TopBarProps) {
               </div>
             </div>
           )}
+        </div>
         </div>
       </div>
 

@@ -2,13 +2,15 @@
 
 import { DashboardLayout } from '@/components/layouts';
 import { ReportsContent } from '@/components/reports';
+import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import addIcon from '@/assets/icons/add.svg';
 
 export default function ReportsPage() {
+  const router = useRouter();
+
   const handleCreateReport = () => {
-    // TODO: Implement create report functionality
-    console.log('Create new report');
+    router.push('/reports/new');
   };
 
   return (

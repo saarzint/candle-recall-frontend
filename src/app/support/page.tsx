@@ -1,21 +1,20 @@
 'use client';
 
 import { useState } from 'react';
-import { Sidebar, TopBar } from '@/components/common';
+import { DashboardLayout } from '@/components/layouts';
 import Image from 'next/image';
 import SendIcon from '@/assets/icons/send.svg';
 import AttachmentIcon from '@/assets/icons/attachment.svg';
-import { ThemeProvider, useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from '@/contexts/ThemeContext';
 
 interface FAQItem {
   question: string;
   answer: string;
 }
 
-function SupportPageContent() {
+export default function SupportPage() {
   const { theme } = useTheme();
   const isDarkMode = theme === 'dark';
-  const [activeTab, setActiveTab] = useState<'chat' | 'faq'>('chat');
   const [message, setMessage] = useState('');
   const [expandedFAQ, setExpandedFAQ] = useState<number | null>(null);
 
@@ -59,120 +58,95 @@ function SupportPageContent() {
   };
 
   return (
-    <div className="flex h-screen bg-body-background">
-        <Sidebar />
+    <DashboardLayout title="Support & FAQ">
+      <div className="flex-1 flex flex-col items-center">
+        <div className="w-full max-w-4xl">
+          {/* Welcome Header */}
+          <div className="text-center mb-8">
+            <h2 className="text-4xl font-bold text-foreground mb-2">Welcome to support</h2>
+          </div>
 
-        <div className="flex-1 flex flex-col">
-          <TopBar title="Support & FAQ" />
+          {/* Chat Section */}
+          <div className="mb-8">
+            <h3 className="text-2xl font-bold text-foreground mb-2">Chat</h3>
+            <div className="relative flex items-center gap-3 bg-background border border-border rounded-xl px-4 py-3.5 shadow-sm">
+              <button className="flex-shrink-0 w-10 h-10 flex items-center justify-center bg-secondary text-primary hover:bg-primary/20 rounded-lg transition-colors">
+                <Image
+                  src={AttachmentIcon}
+                  alt="Attach file"
+                  width={20}
+                  height={20}
+                  style={isDarkMode ? {} : { filter: 'brightness(0) saturate(100%) invert(0%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(0%)' }}
+                />
+              </button>
+              <input
+                type="text"
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
+                onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
+                placeholder="Ask anything..."
+                className="flex-1 bg-transparent border-none outline-none text-base text-foreground placeholder:text-muted-foreground"
+              />
+              <button
+                onClick={handleSendMessage}
+                className="flex items-center gap-2 bg-primary text-white px-5 py-2.5 rounded-lg hover:bg-primary/90 transition-colors font-medium"
+              >
+                Ask
+                <Image src={SendIcon} alt="Send" width={16} height={16} />
+              </button>
+            </div>
+          </div>
 
-          {/* Chat Content Area with Scrolling */}
-          <div className="flex-1 flex flex-col overflow-y-auto bg-secondary">
-            <div className="flex-1 flex flex-col items-center px-4 py-8">
-              <div className="w-full max-w-4xl">
-                {/* Welcome Header */}
-                <div className="text-center mb-8">
-                  <h2 className="text-4xl font-bold text-foreground mb-2">Welcome to support</h2>
-                </div>
+          {/* FAQ Header */}
+          <div className="mb-6">
+            <h2 className="text-2xl font-bold text-foreground mb-2">FAQ</h2>
+          </div>
 
-                {/* Chat Section */}
-                <div className="mb-8">
-                  <h3 className="text-2xl font-bold text-foreground mb-2">Chat</h3>
-                  <div className="relative flex items-center gap-3 bg-background border border-border rounded-xl px-4 py-3.5 shadow-sm">
-                    <button className="flex-shrink-0 w-10 h-10 flex items-center justify-center bg-secondary text-primary hover:bg-primary/20 rounded-lg transition-colors">
-                      <Image
-                        src={AttachmentIcon}
-                        alt="Attach file"
-                        width={20}
-                        height={20}
-                        style={isDarkMode ? {} : { filter: 'brightness(0) saturate(100%) invert(0%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(0%)' }}
-                      />
-                    </button>
-                    <input
-                      type="text"
-                      value={message}
-                      onChange={(e) => setMessage(e.target.value)}
-                      onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
-                      placeholder="Ask anything..."
-                      className="flex-1 bg-transparent border-none outline-none text-base text-foreground placeholder:text-muted-foreground"
+          {/* FAQ List */}
+          <div className="space-y-3">
+            {faqs.map((faq, index) => (
+              <div
+                key={index}
+                className="bg-background border border-border rounded-lg overflow-hidden"
+              >
+                <button
+                  onClick={() => toggleFAQ(index)}
+                  className="w-full flex items-center justify-between px-6 py-4 text-left hover:bg-sidebar-foreground transition-colors"
+                >
+                  <span className="text-sm font-medium text-foreground pr-4">
+                    {faq.question}
+                  </span>
+                  <svg
+                    width="20"
+                    height="20"
+                    viewBox="0 0 20 20"
+                    fill="none"
+                    className={`flex-shrink-0 transition-transform ${
+                      expandedFAQ === index ? 'rotate-180' : ''
+                    }`}
+                  >
+                    <path
+                      d="M5 7.5L10 12.5L15 7.5"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      className="text-muted-foreground"
                     />
-                    <button
-                      onClick={handleSendMessage}
-                      className="flex items-center gap-2 bg-primary text-white px-5 py-2.5 rounded-lg hover:bg-primary/90 transition-colors font-medium"
-                    >
-                      Ask
-                      <Image src={SendIcon} alt="Send" width={16} height={16} />
-                    </button>
+                  </svg>
+                </button>
+                {expandedFAQ === index && (
+                  <div className="px-6 pb-4 pt-2">
+                    <p className="text-sm text-muted-foreground leading-relaxed">
+                      {faq.answer}
+                    </p>
                   </div>
-                </div>
-
-                {/* FAQ Header */}
-                <div className="mb-6">
-                  <h2 className="text-2xl font-bold text-foreground mb-2">FAQ</h2>
-                </div>
-
-                {/* FAQ List */}
-                <div className="space-y-3">
-                  {faqs.map((faq, index) => (
-                    <div
-                      key={index}
-                      className="bg-background border border-border rounded-lg overflow-hidden"
-                    >
-                      <button
-                        onClick={() => toggleFAQ(index)}
-                        className="w-full flex items-center justify-between px-6 py-4 text-left hover:bg-sidebar-foreground transition-colors"
-                      >
-                        <span className="text-sm font-medium text-foreground pr-4">
-                          {faq.question}
-                        </span>
-                        <svg
-                          width="20"
-                          height="20"
-                          viewBox="0 0 20 20"
-                          fill="none"
-                          className={`flex-shrink-0 transition-transform ${
-                            expandedFAQ === index ? 'rotate-180' : ''
-                          }`}
-                        >
-                          <path
-                            d="M5 7.5L10 12.5L15 7.5"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            className="text-muted-foreground"
-                          />
-                        </svg>
-                      </button>
-                      {expandedFAQ === index && (
-                        <div className="px-6 pb-4 pt-2">
-                          <p className="text-sm text-muted-foreground leading-relaxed">
-                            {faq.answer}
-                          </p>
-                        </div>
-                      )}
-                    </div>
-                  ))}
-                </div>
+                )}
               </div>
-            </div>
-
-            {/* Footer Disclaimer */}
-            <div className="text-center py-6 px-4 bg-secondary">
-              <p className="text-xs text-muted-foreground">
-                Not affiliated with TD Ameritrade, Charles Schwab, or OpenAI.
-                Not investment advice. For entertainment purposes only.
-              </p>
-            </div>
+            ))}
           </div>
         </div>
       </div>
-  );
-}
-
-export default function SupportPage() {
-  return (
-    <ThemeProvider>
-      <SupportPageContent />
-    </ThemeProvider>
+    </DashboardLayout>
   );
 }

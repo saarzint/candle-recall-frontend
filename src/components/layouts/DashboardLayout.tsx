@@ -6,11 +6,13 @@ import { ThemeProvider } from '@/contexts/ThemeContext';
 
 interface DashboardLayoutProps {
   children: ReactNode;
-  title: string;
+  title?: string;
   actionButton?: ReactNode;
+  breadcrumb?: ReactNode;
+  showTitle?: boolean;
 }
 
-export default function DashboardLayout({ children, title, actionButton }: DashboardLayoutProps) {
+export default function DashboardLayout({ children, title, actionButton, breadcrumb, showTitle = true }: DashboardLayoutProps) {
   return (
     <ThemeProvider>
       <div className="flex h-screen bg-body-background">
@@ -20,7 +22,7 @@ export default function DashboardLayout({ children, title, actionButton }: Dashb
         {/* Main Content Area */}
         <div className="flex-1 flex flex-col">
           {/* Top Bar */}
-          <TopBar title={title} actionButton={actionButton} />
+          <TopBar title={showTitle ? title : undefined} actionButton={actionButton} breadcrumb={breadcrumb} />
 
           {/* Main Content Area with Scrolling */}
           <div className="flex-1 flex flex-col overflow-y-auto bg-secondary">
