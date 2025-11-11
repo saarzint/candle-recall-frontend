@@ -3,6 +3,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
+import { usePathname } from 'next/navigation';
 import Icon from '@/assets/icons/icon.svg';
 import SidebarToggle from '@/assets/icons/sidebar-toggle.svg';
 import PinIcon from '@/assets/icons/pin.svg';
@@ -21,6 +22,7 @@ interface Chat {
 export default function Sidebar() {
   const { theme } = useTheme();
   const isDarkMode = theme === 'dark';
+  const pathname = usePathname();
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [chats] = useState<Chat[]>([
     { id: '1', name: 'Finance Friends', isPinned: true },
@@ -65,7 +67,9 @@ export default function Sidebar() {
         {/* New Chat */}
         <Link
           href="/dashboard"
-          className={`w-full flex items-center ${isCollapsed ? 'justify-center' : 'gap-3'} px-3 py-3 bg-sidebar-foreground hover:bg-secondary rounded-md text-left`}
+          className={`w-full flex items-center ${isCollapsed ? 'justify-center' : 'gap-3'} px-3 py-3 ${
+            pathname === '/dashboard' ? 'bg-sidebar-foreground' : 'hover:bg-sidebar-foreground'
+          } rounded-md text-left`}
         >
           <Image
             src={ChatIcon}
@@ -74,11 +78,16 @@ export default function Sidebar() {
             height={18}
             className={isDarkMode ? 'brightness-0 invert' : ''}
           />
-          {!isCollapsed && <span className="text-sm text-foreground font-medium">New Chat</span>}
+          {!isCollapsed && <span className={`text-sm ${pathname === '/dashboard' ? 'text-foreground font-medium' : 'text-foreground'}`}>New Chat</span>}
         </Link>
 
         {/* Reports */}
-        <button className={`w-full flex items-center ${isCollapsed ? 'justify-center' : 'gap-3'} px-3 py-3 hover:bg-sidebar-foreground rounded-md text-left`}>
+        <Link
+          href="/reports"
+          className={`w-full flex items-center ${isCollapsed ? 'justify-center' : 'gap-3'} px-3 py-3 ${
+            pathname === '/reports' ? 'bg-sidebar-foreground' : 'hover:bg-sidebar-foreground'
+          } rounded-md text-left`}
+        >
           <Image
             src={ExportIcon}
             alt="Reports"
@@ -86,8 +95,8 @@ export default function Sidebar() {
             height={18}
             className={isDarkMode ? 'brightness-0 invert' : ''}
           />
-          {!isCollapsed && <span className="text-sm text-foreground">Reports</span>}
-        </button>
+          {!isCollapsed && <span className={`text-sm ${pathname === '/reports' ? 'text-foreground font-medium' : 'text-foreground'}`}>Reports</span>}
+        </Link>
 
         {/* Chats Section */}
         {!isCollapsed && (
@@ -99,9 +108,12 @@ export default function Sidebar() {
             </div>
 
             {chats.map((chat) => (
-              <div
+              <Link
                 key={chat.id}
-                className="relative group flex items-center gap-3 px-3 py-3 hover:bg-sidebar-foreground rounded-md cursor-pointer"
+                href={`/chat/${chat.id}`}
+                className={`relative group flex items-center gap-3 px-3 py-3 ${
+                  pathname === `/chat/${chat.id}` ? 'bg-sidebar-foreground' : 'hover:bg-sidebar-foreground'
+                } rounded-md cursor-pointer`}
               >
                 <span className="flex-1 text-sm text-foreground truncate">
                   {chat.name}
@@ -127,7 +139,7 @@ export default function Sidebar() {
                     />
                   </button>
                 )}
-              </div>
+              </Link>
             ))}
           </div>
         )}
