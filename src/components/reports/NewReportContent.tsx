@@ -1,12 +1,13 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useTheme } from '@/contexts/ThemeContext';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import dynamic from 'next/dynamic';
 import pencilIcon from '@/assets/icons/pencil.svg';
 import ellipsisIcon from '@/assets/icons/ellipsis-horizontal.svg';
+import attachmentIcon from '@/assets/icons/attachment.svg';
 
 // Dynamically import the markdown editor to avoid SSR issues
 const MDEditor = dynamic(
@@ -25,10 +26,30 @@ export default function NewReportContent() {
   const [tagInput, setTagInput] = useState('');
   const [createdDate] = useState('Jul 14 2025');
   const [modifiedDate] = useState('Jul 15 2025');
+  const [showAttachmentMenu, setShowAttachmentMenu] = useState(false);
+  const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
+  const attachmentMenuRef = useRef<HTMLDivElement>(null);
+
+  // Close attachment menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (attachmentMenuRef.current && !attachmentMenuRef.current.contains(event.target as Node)) {
+        setShowAttachmentMenu(false);
+      }
+    };
+
+    if (showAttachmentMenu) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [showAttachmentMenu]);
 
   const handleSave = () => {
     // TODO: Implement save functionality
-    console.log('Saving new report:', { title, content, tags });
+    console.log('Saving new report:', { title, content, tags, uploadedFiles });
     // Redirect to reports list or the new report detail page
     router.push('/reports');
   };
@@ -45,6 +66,18 @@ export default function NewReportContent() {
 
   const handleRemoveTag = (tagToRemove: string) => {
     setTags(tags.filter(tag => tag !== tagToRemove));
+  };
+
+  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (files) {
+      setUploadedFiles(prev => [...prev, ...Array.from(files)]);
+      setShowAttachmentMenu(false);
+    }
+  };
+
+  const handleRemoveFile = (index: number) => {
+    setUploadedFiles(prev => prev.filter((_, i) => i !== index));
   };
 
   return (
@@ -64,6 +97,80 @@ export default function NewReportContent() {
           />
 
           <div className="flex items-center gap-2 ml-4">
+            {/* Attachment Icon with Dropdown */}
+            <div className="relative" ref={attachmentMenuRef}>
+              <button
+                onClick={() => setShowAttachmentMenu(!showAttachmentMenu)}
+                className="p-2 rounded-lg hover:bg-sidebar-foreground transition-colors"
+                aria-label="Attachment options"
+              >
+                <Image
+                  src={attachmentIcon}
+                  alt="Attachment"
+                  width={20}
+                  height={20}
+                  className={isDarkMode ? '' : 'brightness-0'}
+                />
+              </button>
+
+              {/* Attachment Dropdown Menu */}
+              {showAttachmentMenu && (
+                <div className={`absolute right-0 top-12 w-64 rounded-lg shadow-lg border border-border z-50 ${
+                  isDarkMode ? 'bg-[#27272A]' : 'bg-white'
+                }`}>
+                  <div className="p-2">
+                    <div className={`px-3 py-2 text-sm font-medium ${
+                      isDarkMode ? 'text-gray-300' : 'text-gray-700'
+                    }`}>
+                      Include attachment
+                    </div>
+
+                    <label className={`flex items-center gap-3 px-3 py-2 rounded cursor-pointer hover:bg-sidebar-foreground transition-colors ${
+                      isDarkMode ? 'text-gray-300' : 'text-gray-700'
+                    }`}>
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                        <polyline points="17 8 12 3 7 8" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                        <line x1="12" y1="3" x2="12" y2="15" strokeWidth="2" strokeLinecap="round"/>
+                      </svg>
+                      <span className="text-sm">Upload a file</span>
+                      <input
+                        type="file"
+                        onChange={handleFileUpload}
+                        className="hidden"
+                        multiple
+                      />
+                    </label>
+
+                    <button className={`flex items-center gap-3 w-full px-3 py-2 rounded hover:bg-sidebar-foreground transition-colors ${
+                      isDarkMode ? 'text-gray-300' : 'text-gray-700'
+                    }`}>
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                        <polyline points="14 2 14 8 20 8" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                        <line x1="12" y1="18" x2="12" y2="12" strokeWidth="2" strokeLinecap="round"/>
+                        <line x1="9" y1="15" x2="15" y2="15" strokeWidth="2" strokeLinecap="round"/>
+                      </svg>
+                      <span className="text-sm">Upload a report</span>
+                      <svg className="ml-auto" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <polyline points="9 18 15 12 9 6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            <button className="p-2 rounded-lg hover:bg-sidebar-foreground transition-colors">
+              <Image
+                src={ellipsisIcon}
+                alt="More options"
+                width={20}
+                height={20}
+                className={isDarkMode ? '' : 'brightness-0'}
+              />
+            </button>
+
             <button
               onClick={() => router.push('/reports')}
               className="px-4 py-2 text-sm rounded-lg border border-border hover:bg-sidebar-foreground transition-colors"
@@ -140,6 +247,45 @@ export default function NewReportContent() {
             }`}
           />
         </div>
+
+        {/* Uploaded Files */}
+        {uploadedFiles.length > 0 && (
+          <div className="mt-4">
+            <div className="text-sm font-medium mb-2 text-muted-foreground">
+              Attachments ({uploadedFiles.length})
+            </div>
+            <div className="flex flex-wrap gap-2">
+              {uploadedFiles.map((file, index) => (
+                <div
+                  key={index}
+                  className={`flex items-center gap-2 px-3 py-2 rounded-lg border border-border ${
+                    isDarkMode ? 'bg-[#18181B]' : 'bg-gray-50'
+                  }`}
+                >
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    <polyline points="14 2 14 8 20 8" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                  <span className={`text-sm ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                    {file.name}
+                  </span>
+                  <span className="text-xs text-muted-foreground">
+                    ({(file.size / 1024).toFixed(1)} KB)
+                  </span>
+                  <button
+                    onClick={() => handleRemoveFile(index)}
+                    className="ml-2 hover:text-destructive transition-colors"
+                  >
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                      <line x1="18" y1="6" x2="6" y2="18" strokeWidth="2" strokeLinecap="round"/>
+                      <line x1="6" y1="6" x2="18" y2="18" strokeWidth="2" strokeLinecap="round"/>
+                    </svg>
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Content Section */}

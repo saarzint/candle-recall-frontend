@@ -5,7 +5,6 @@ import { DashboardLayout } from '@/components/layouts';
 import Image from 'next/image';
 import SendIcon from '@/assets/icons/send.svg';
 import AttachmentIcon from '@/assets/icons/attachment.svg';
-import { useTheme } from '@/contexts/ThemeContext';
 
 interface FAQItem {
   question: string;
@@ -13,8 +12,6 @@ interface FAQItem {
 }
 
 export default function SupportPage() {
-  const { theme } = useTheme();
-  const isDarkMode = theme === 'dark';
   const [message, setMessage] = useState('');
   const [expandedFAQ, setExpandedFAQ] = useState<number | null>(null);
 
@@ -76,7 +73,6 @@ export default function SupportPage() {
                   alt="Attach file"
                   width={20}
                   height={20}
-                  style={isDarkMode ? {} : { filter: 'brightness(0) saturate(100%) invert(0%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(0%)' }}
                 />
               </button>
               <input
