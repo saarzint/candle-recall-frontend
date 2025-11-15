@@ -56,7 +56,7 @@ export default function ReportCard({ title, date, description, tags }: ReportCar
   return (
     <div
       className={`rounded-xl p-6 transition-colors ${
-        isDarkMode ? 'bg-[#18181B] hover:bg-[#27272A]' : 'bg-white hover:bg-gray-50'
+        isDarkMode ? 'bg-[#18181B] hover:bg-[#3F3F46]' : 'bg-white hover:bg-gray-50'
       }`}
     >
       {/* Header with Tags and More Button */}
@@ -74,10 +74,10 @@ export default function ReportCard({ title, date, description, tags }: ReportCar
             {tags.map((tag, index) => (
               <span
                 key={index}
-                className={`px-3 py-1 rounded-full text-xs font-medium border-1 border-border ${
+                className={`px-3 py-1 rounded-full text-xs font-medium border ${
                   isDarkMode
-                    ? 'text-gray-300'
-                    : 'text-gray-700'
+                    ? 'text-gray-300 border-gray-500 bg-[#27272A]'
+                    : 'text-gray-700 border-border'
                 }`}
               >
                 {tag}

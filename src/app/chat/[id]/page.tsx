@@ -3,6 +3,7 @@
 import addIcon from '@/assets/icons/add.svg';
 import { ActiveChatContent } from '@/components/chat';
 import { DashboardLayout } from '@/components/layouts';
+import { CreateReportButton } from '@/components/reports';
 import Image from 'next/image';
 import { use } from 'react';
 
@@ -70,20 +71,7 @@ export default function ChatPage({ params }: PageProps) {
   return (
     <DashboardLayout
       title={chat.title}
-      actionButton={
-        <button
-          onClick={handleCreateReport}
-          className="flex items-center gap-2 px-4 py-2 bg-white border-border text-gray rounded-lg transition-colors font-medium text-sm"
-        >
-          <Image
-            src={addIcon}
-            alt="Add"
-            width={16}
-            height={16}
-          />
-          Create new report
-        </button>
-      }
+      actionButton={<CreateReportButton onClick={handleCreateReport} />}
     >
       <ActiveChatContent chatId={chat.id} initialMessages={chat.messages} />
     </DashboardLayout>

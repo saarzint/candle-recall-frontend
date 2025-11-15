@@ -6,6 +6,9 @@ import Image from 'next/image';
 import documentIcon from '@/assets/icons/document.svg';
 import calendarIcon from '@/assets/icons/calendar.svg';
 import sortIcon from '@/assets/icons/sort.svg';
+import alphabetIcon from '@/assets/icons/alphabet.svg';
+import timeIcon from '@/assets/icons/time.svg';
+import timerResetIcon from '@/assets/icons/timer-reset.svg';
 
 type SortOption = 'Alphabet' | 'Created time' | 'Last modify';
 
@@ -160,7 +163,7 @@ export default function ReportFilters() {
             alt="Document filter"
             width={16}
             height={16}
-            className={isDarkMode ? 'brightness-200' : ''}
+            className={isDarkMode ? 'brightness-0 invert' : ''}
           />
           {stockFilter}
         </button>
@@ -261,7 +264,7 @@ export default function ReportFilters() {
             alt="Calendar filter"
             width={16}
             height={16}
-            className={isDarkMode ? 'brightness-200' : ''}
+            className={isDarkMode ? 'brightness-0 invert' : ''}
           />
           {timeFilter}
         </button>
@@ -367,7 +370,7 @@ export default function ReportFilters() {
             alt="Sort filter"
             width={16}
             height={16}
-            className={isDarkMode ? 'brightness-200' : ''}
+            className={isDarkMode ? 'brightness-0 invert' : ''}
           />
           Sort
         </button>
@@ -380,7 +383,7 @@ export default function ReportFilters() {
             }`}
           >
             {/* Dropdown Header */}
-            <div className="px-4 py-3 border-b border-border">
+            <div className="px-4 py-3">
               <h3 className="text-sm font-medium text-foreground">Sort by</h3>
             </div>
 
@@ -402,21 +405,31 @@ export default function ReportFilters() {
                 >
                   <div className="flex items-center gap-3">
                     {option === 'Alphabet' && (
-                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                        <text x="4" y="18" fontSize="16" fontWeight="bold" fill="currentColor">Aa</text>
-                      </svg>
+                      <Image
+                        src={alphabetIcon}
+                        alt="Alphabet"
+                        width={20}
+                        height={20}
+                        className={isDarkMode ? 'brightness-0 invert' : ''}
+                      />
                     )}
                     {option === 'Created time' && (
-                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                        <circle cx="12" cy="12" r="10"/>
-                        <path d="M12 6v6l4 2" strokeLinecap="round"/>
-                      </svg>
+                      <Image
+                        src={timeIcon}
+                        alt="Time"
+                        width={20}
+                        height={20}
+                        className={isDarkMode ? 'brightness-0 invert' : ''}
+                      />
                     )}
                     {option === 'Last modify' && (
-                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" strokeLinecap="round" strokeLinejoin="round"/>
-                        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" strokeLinecap="round" strokeLinejoin="round"/>
-                      </svg>
+                      <Image
+                        src={timerResetIcon}
+                        alt="Last modify"
+                        width={20}
+                        height={20}
+                        className={isDarkMode ? 'brightness-0 invert' : ''}
+                      />
                     )}
                     <span>{option}</span>
                   </div>

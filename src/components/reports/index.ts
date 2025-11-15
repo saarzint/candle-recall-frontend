@@ -3,3 +3,4 @@ export { default as ReportCard } from './ReportCard';
 export { default as ReportFilters } from './ReportFilters';
 export { default as ReportDetailContent } from './ReportDetailContent';
 export { default as NewReportContent } from './NewReportContent';
+export { default as CreateReportButton } from './CreateReportButton';
